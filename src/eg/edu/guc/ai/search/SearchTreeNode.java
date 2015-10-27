@@ -1,5 +1,5 @@
 package eg.edu.guc.ai.search;
 
-public class Node {
+public class SearchTreeNode {
 
 }
