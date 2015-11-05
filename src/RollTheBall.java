@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Queue;
 
 // A class representing the search problem of Roll the Ball.
@@ -29,9 +30,20 @@ public class RollTheBall extends SearchProblem{
 		// i.e. the block moves from [row, column] to [row + deltaX, column + deltaY].
 		@Override
 		public Queue<Node> execute(Node node, int... args) {
-			// TODO Auto-generated method stub
+			Queue<Node> resultingNodes = new LinkedList<Node>();
+			Node newNode = new Node(1, node, deepCopyState(node.state),
+					MoveBlockOperation.getInstance());
+			newNode.state.moveTile(args);
+			resultingNodes.add(newNode);
 			return null;
 		}
-		
+
+		private Board deepCopyState(Board state) {
+			int [][] board = new int[state.board.length][];
+			for (int i = 0; i < state.board.length; i++) {
+		        board[i] = Arrays.copyOf(state.board[i], state.board[i].length);
+		    }
+			return new Board(board);
+		}		
 	}
 }

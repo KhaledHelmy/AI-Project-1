@@ -40,4 +40,28 @@ public class Board {
 		height = board.length;
 		width = board[0].length;
 	}
+
+	public void moveTile(int... args) {
+		int oldLocationTile = this.board[args[0]][args[1]];
+		int newLocationTile = this.board[args[0]+args[2]][args[1]+args[3]];
+		if (Tile.isMovable(oldLocationTile) && isBlank(newLocationTile)) {
+			int blankTile = 0;
+			blankTile |= (oldLocationTile & (1 << 5));
+			blankTile |= (oldLocationTile & (1 << 6));
+			this.board[args[0]+args[2]][args[1]+args[3]] = this.board[args[0]][args[1]];
+			this.board[args[0]+args[2]][args[1]+args[3]] |= (newLocationTile & (1 << 5));
+			this.board[args[0]+args[2]][args[1]+args[3]] |= (newLocationTile & (1 << 6));
+			this.board[args[0]][args[1]] = blankTile;
+		} else {
+			throw new RuntimeException("Tile is not movable");
+		}
+	}
+
+	private boolean isBlank(int tile) {
+		return !Tile.isMovable(tile) &&
+				!Tile.isLeftSideOpened(tile) &&
+				!Tile.isRightSideOpened(tile) &&
+				!Tile.isUpperSideOpened(tile) &&
+				!Tile.isBottomSideOpened(tile);
+	}
 }
