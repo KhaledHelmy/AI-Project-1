@@ -29,6 +29,14 @@ public class Board {
 		public static boolean isBottomSideOpened(int tile){
 			return (tile & (1 << 4)) != 0;
 		}
+
+		public static boolean isStart(int tile) {
+			return (tile & (1 << 5)) != 0;
+		}
+
+		public static boolean isEnd(int tile) {
+			return (tile & (1 << 6)) != 0;
+		}
 	}
 	
 	public int board[][];

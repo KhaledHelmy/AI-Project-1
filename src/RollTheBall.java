@@ -3,6 +3,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import Board.Tile;
+
 // A class representing the search problem of Roll the Ball.
 public class RollTheBall extends SearchProblem{
 	
@@ -13,9 +15,51 @@ public class RollTheBall extends SearchProblem{
 	@Override
 	public boolean applyGoalTest(Node node){
 		// TODO Auto-generated method stub
-		return false;
+		int startX, startY;
+		int endX, endY;
+		for (int i=0; i<node.state.height; i++) {
+			for (int j=0; j<node.state.width; j++) {
+				if (Tile.isStart(node.state.board[i][j])) {
+					startX = i;
+					startY = j;
+				}
+				if (Tile.isEnd(node.state.board[i][j])) {
+					endX = i;
+					endY = j;
+				}
+			}
+		}
+		boolean[][] vis = new boolean[node.state.height][node.state.width];
+		int[] deltaX = {0, 0, 1, -1};
+		int[] deltaY = {1, -1, 0, 0};
+		return findPath(startX, startY, endX, endY, deltaX, deltaY, node.state, vis);
 	}
-	
+
+	private boolean findPath(int curX, int curY, int endX, int endY,
+			int[] deltaX, int[] deltaY, Board state, boolean[][] vis) {
+		if (curX == endX && curY == endY) {
+			return true;
+		}
+		if (vis[curX][curY]) {
+			return false;
+		}
+		vis[curX][curY] = true;
+		boolean result = false;
+		for (int k=0; k<4; k++) {
+			int newX = curX + deltaX[k];
+			int newY = curY + deltaY[k];
+			if (newX >= 0 && newX < state.height && newY >= 0 && newY < state.width) {
+				if ((k == 0 && Tile.isLeftSideOpened(state.board[newX][newY])) ||
+						(k == 1 && Tile.isRightSideOpened(state.board[newX][newY])) ||
+						(k == 2 && Tile.isUpperSideOpened(state.board[newX][newY])) ||
+						(k == 3 && Tile.isBottomSideOpened(state.board[newX][newY]))) {
+					result |= findPath(newX, newY, endX, endY, deltaX, deltaY, state, vis);
+				}
+			}
+		}
+		return result;
+	}
+
 	// A class representing the move block operation
 	public static class MoveBlockOperation implements Operation{
 		private static MoveBlockOperation instance = new MoveBlockOperation();
