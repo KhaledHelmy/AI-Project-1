@@ -62,15 +62,28 @@ public class Main {
 				}
 			}
 		}
-		/*int[][] board = new int[3][3];
+		/*board = new int[3][3];
 		board[0][0] = (1 << 4) | (1 << 5);
 		board[1][1] = (1 << 0) | (1 << 2) | (1 << 4);
 		board[2][0] = (1 << 2) | (1 << 3);
 		board[2][1] = (1 << 1) | (1 << 6);*/
+		/*board = new int[3][3];
+		board[0][0] = (1 << 3) | (1 << 6);
+		board[0][1] = 0;
+		board[0][2] = (1 << 2) | (1 << 4) | (1 << 0);
+		board[1][0] = 0;
+		board[1][1] = (1 << 1) | (1 << 4) | (1 << 0);
+		board[1][2] = 0;
+		board[2][0] = 0;
+		board[2][1] = (1 << 1) | (1 << 3) | (1 << 0);
+		board[2][2] = (1 << 5) | (1 << 2);*/
 		Board stateInstance = new Board(board);
 		RollTheBall problemInstance = new RollTheBall(stateInstance);
 		SearchAlgorithm searchInstance = new SearchAlgorithm();
 		BFS bfsInstance = new BFS();
 		SearchOutput output = searchInstance.search(problemInstance, bfsInstance, true);
+		if (output != null && !output.failure) {
+			System.out.println(output.numberOfExpandedNodes);
+		}
 	}
 }

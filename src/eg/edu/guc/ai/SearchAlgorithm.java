@@ -153,7 +153,7 @@ public class SearchAlgorithm {
 		
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			PriorityQueue<Node> pq = new PriorityQueue<>(0, new GreedyComparator());
+			PriorityQueue<Node> pq = new PriorityQueue<>(1, new GreedyComparator());
 			for(Node node : nodes){
 				pq.add(node);
 			}
@@ -180,7 +180,7 @@ public class SearchAlgorithm {
 		
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			PriorityQueue<Node> pq = new PriorityQueue<>(0, new AStarComparator());
+			PriorityQueue<Node> pq = new PriorityQueue<>(1, new AStarComparator());
 			for(Node node : nodes){
 				pq.add(node);
 			}
