@@ -1,3 +1,4 @@
+package eg.edu.guc.ai;
 
 // A class representing a search tree node.
 public class Node {

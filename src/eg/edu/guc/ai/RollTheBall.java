@@ -1,9 +1,10 @@
+package eg.edu.guc.ai;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import Board.Tile;
+import eg.edu.guc.ai.Board.Tile;
 
 // A class representing the search problem of Roll the Ball.
 public class RollTheBall extends SearchProblem{
@@ -15,8 +16,8 @@ public class RollTheBall extends SearchProblem{
 	@Override
 	public boolean applyGoalTest(Node node){
 		// TODO Auto-generated method stub
-		int startX, startY;
-		int endX, endY;
+		int startX = 0, startY = 0;
+		int endX = node.state.height-1, endY = node.state.width-1;
 		for (int i=0; i<node.state.height; i++) {
 			for (int j=0; j<node.state.width; j++) {
 				if (Tile.isStart(node.state.board[i][j])) {

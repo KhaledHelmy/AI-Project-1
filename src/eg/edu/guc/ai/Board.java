@@ -1,3 +1,4 @@
+package eg.edu.guc.ai;
 
 public class Board {
 	public static class Tile{

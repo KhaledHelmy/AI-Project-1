@@ -1,3 +1,4 @@
+package eg.edu.guc.ai;
 import java.util.Queue;
 
 // A class representing an interface for a search strategy

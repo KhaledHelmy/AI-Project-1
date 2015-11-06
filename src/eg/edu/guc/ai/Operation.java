@@ -1,3 +1,4 @@
+package eg.edu.guc.ai;
 import java.util.Queue;
 
 // An interface representing an operation in a search problem
