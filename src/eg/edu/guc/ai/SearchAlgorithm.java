@@ -38,6 +38,15 @@ public class SearchAlgorithm {
 			return null;
 		}
 	}
+
+	public static class IDS implements Strategy{
+
+		@Override
+		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
 	
 	public static class Greedy implements Strategy{
 
