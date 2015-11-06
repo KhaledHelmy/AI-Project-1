@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import eg.edu.guc.ai.Board;
+import eg.edu.guc.ai.RollTheBall;
+import eg.edu.guc.ai.SearchAlgorithm;
+import eg.edu.guc.ai.SearchAlgorithm.BFS;
+
 
 public class Main {
 
@@ -56,5 +61,10 @@ public class Main {
 				}
 			}
 		}
+		Board stateInstance = new Board(board);
+		RollTheBall problemInstance = new RollTheBall(stateInstance);
+		SearchAlgorithm searchInstance = new SearchAlgorithm();
+		BFS bfsInstance = new BFS();
+		searchInstance.search(problemInstance, bfsInstance, false);
 	}
 }
