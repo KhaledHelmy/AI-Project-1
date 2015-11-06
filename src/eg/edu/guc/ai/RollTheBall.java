@@ -1,7 +1,9 @@
 package eg.edu.guc.ai;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import eg.edu.guc.ai.Board.Tile;
@@ -55,11 +57,113 @@ public class RollTheBall extends SearchProblem{
 		return result;
 	}
 	
-	@Override
-	public int Heuristic2(Node node){
-		return 0;
+	class Heuristic2Node implements Comparator<Heuristic2Node>{
+		int x;
+		int y;
+		int cost;
+		int previousDirection;
+		
+		public Heuristic2Node(int x, int y, int cost, int pd){
+			this.x = x;
+			this.y = y;
+			this.cost = cost;
+			this.previousDirection = pd;
+		}
+		
+		@Override
+		public int compare(Heuristic2Node o1, Heuristic2Node o2) {
+			return o2.cost - o1.cost;
+		}
 	}
 	
+	@Override
+	public int Heuristic2(Node node){
+		Board board = (Board)node.state;
+		int[][] grid = board.board;
+		int nrows = grid.length;
+		int ncolumns = grid[0].length;
+		int startX = -1, startY = -1, endX = -1, endY = -1;
+		
+		for (int i=0; i<nrows; i++) {
+			for (int j=0; j<ncolumns; j++) {
+				if (Tile.isStart(grid[i][j])) {
+					startX = i;
+					startY = j;
+				}
+				if (Tile.isEnd(grid[i][j])) {
+					endX = i;
+					endY = j;
+				}
+			}
+		}
+		
+		int[] deltaX = {0, 0, 1, -1};
+		int[] deltaY = {1, -1, 0, 0};
+		
+		PriorityQueue<Heuristic2Node> pq = new PriorityQueue<Heuristic2Node>();
+		pq.add(new Heuristic2Node(startX, startY, 0, -1));
+		
+		while(!pq.isEmpty()){
+			Heuristic2Node curNode = pq.poll();
+			if(curNode.x == endX && curNode.y == endY){
+				return curNode.cost;
+			}
+			for(int dir = 0; dir < 4; dir++){
+				int newx = curNode.x + deltaX[dir];
+				int newy = curNode.y + deltaY[dir];
+				if(newx < 0 || newx >= nrows || newy < 0 || newy >= ncolumns){
+					continue;
+				}
+				if(Tile.isBlank(grid[curNode.x][curNode.y])){
+					pq.add(new Heuristic2Node(newx, newy, curNode.cost + 1, dir));
+				}
+				else if(canGoReverse(grid[curNode.x][curNode.y], curNode.previousDirection) && canGo(grid[curNode.x][curNode.y], dir)){
+					pq.add(new Heuristic2Node(newx, newy, curNode.cost, dir));
+				}
+				else{
+					if(Tile.isMovable(grid[curNode.x][curNode.y])){
+						pq.add(new Heuristic2Node(newx, newy, curNode.cost + 2, dir));
+					}
+				}
+				
+			}
+		}
+		
+		return Integer.MAX_VALUE;
+	}
+	
+	private boolean canGoReverse(int cell, int dir) {
+		if(dir == 1 && Tile.isRightSideOpened(cell)){
+			return true;
+		}
+		if(dir == 0 && Tile.isLeftSideOpened(cell)){
+			return true;
+		}
+		if(dir == 3 && Tile.isBottomSideOpened(cell)){
+			return true;
+		}
+		if(dir == 2 && Tile.isUpperSideOpened(cell)){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean canGo(int cell, int dir) {
+		if(dir == 0 && Tile.isRightSideOpened(cell)){
+			return true;
+		}
+		if(dir == 1 && Tile.isLeftSideOpened(cell)){
+			return true;
+		}
+		if(dir == 2 && Tile.isBottomSideOpened(cell)){
+			return true;
+		}
+		if(dir == 3 && Tile.isUpperSideOpened(cell)){
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public Queue<Node> expand(Node node) {
 		Queue<Node> children = new LinkedList<Node>();
