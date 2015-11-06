@@ -126,7 +126,7 @@ public class SearchAlgorithm {
 		
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			PriorityQueue<Node> pq = new PriorityQueue<>(0, new GreedyComparator());
+			PriorityQueue<Node> pq = new PriorityQueue<Node>(1, new GreedyComparator());
 			for(Node node : nodes){
 				pq.add(node);
 			}
