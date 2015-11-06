@@ -13,6 +13,51 @@ public class RollTheBall extends SearchProblem{
 		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveTileOperation.getInstance())));
 	}
 
+	public int Heuristic1(Node node){
+		Board board = (Board)node.state;
+		int[][] grid = board.board;
+		int nrows = grid.length;
+		int ncolumns = grid[0].length;
+		int startX = -1, startY = -1, endX = -1, endY = -1;
+		
+		for (int i=0; i<nrows; i++) {
+			for (int j=0; j<ncolumns; j++) {
+				if (Tile.isStart(grid[i][j])) {
+					startX = i;
+					startY = j;
+				}
+				if (Tile.isEnd(grid[i][j])) {
+					endX = i;
+					endY = j;
+				}
+			}
+		}
+		
+		int[] deltaX = {0, 0, 1, -1};
+		int[] deltaY = {1, -1, 0, 0};
+		
+		int result = Integer.MAX_VALUE;
+		
+		for(int x1 = 0; x1 < nrows; x1++){
+			for(int y1 = 0; y1 < ncolumns; y1++){
+				if(findPath(startX, startY, x1, y1, deltaX, deltaY, board, new boolean[nrows][ncolumns])){
+					for(int x2 = 0; x2 < nrows; x2++){
+						for(int y2 = 0; y2 < ncolumns; y2++){
+							if(findPath(x2,  y2, endX, endY, deltaX, deltaY, board, new boolean[nrows][ncolumns])){
+								result = Math.min(result, Math.abs(x1 - x2) + Math.abs(y1 - y2));
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public int Heuristic2(Node node){
+		return 0;
+	}
+	
 	@Override
 	public Queue<Node> expand(Node node) {
 		Queue<Node> children = new LinkedList<Node>();

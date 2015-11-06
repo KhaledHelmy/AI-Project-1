@@ -1,11 +1,13 @@
 package eg.edu.guc.ai;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import eg.edu.guc.ai.Board.Tile;
 
 
-public class SearchAlgorithm {
+public abstract class SearchAlgorithm {
 	
 	public class SearchOutput{
 		public boolean failure;
@@ -111,21 +113,87 @@ public class SearchAlgorithm {
 		}
 	}
 	
-	public static class Greedy implements Strategy{
-
+	public static abstract int Heuristic1(Node node);
+	public static abstract int Heuristic2(Node node);
+	
+	public static class GreedyHeuristic1 implements Strategy{
+		static class GreedyComparator implements Comparator<Node> {
+			public int compare(Node n1, Node n2) {
+				int h1 = SearchAlgorithm.Heuristic1(n1);
+				int h2 = SearchAlgorithm.Heuristic1(n2);
+				return h2 - h1;
+			}
+		}
+		
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			// TODO Auto-generated method stub
-			return null;
+			PriorityQueue<Node> pq = new PriorityQueue<>(0, new GreedyComparator());
+			for(Node node : nodes){
+				pq.add(node);
+			}
+			for(Node node : newNodes){
+				pq.add(node);
+			}
+			Queue<Node> result = new LinkedList<Node>();
+			Node[] orderedNodes = pq.toArray(new Node[pq.size()]);
+			for(int q = orderedNodes.length - 1; q >= 0; q--){
+				result.add(orderedNodes[q]);
+			}
+			return result;
+		}
+	}
+	
+	public static class GreedyHeuristic2 implements Strategy{
+		static class GreedyComparator implements Comparator<Node> {
+			public int compare(Node n1, Node n2) {
+				int h1 = SearchAlgorithm.Heuristic2(n1);
+				int h2 = SearchAlgorithm.Heuristic2(n2);
+				return h2 - h1;
+			}
+		}
+		
+		@Override
+		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
+			PriorityQueue<Node> pq = new PriorityQueue<>(0, new GreedyComparator());
+			for(Node node : nodes){
+				pq.add(node);
+			}
+			for(Node node : newNodes){
+				pq.add(node);
+			}
+			Queue<Node> result = new LinkedList<Node>();
+			Node[] orderedNodes = pq.toArray(new Node[pq.size()]);
+			for(int q = orderedNodes.length - 1; q >= 0; q--){
+				result.add(orderedNodes[q]);
+			}
+			return result;
 		}
 	}
 
 	public static class AStar implements Strategy{
-
+		static class AStarComparator implements Comparator<Node> {
+			public int compare(Node n1, Node n2) {
+				int h1 = SearchAlgorithm.Heuristic2(n1) + n1.pathCost;
+				int h2 = SearchAlgorithm.Heuristic2(n2) + n2.pathCost;
+				return h2 - h1;
+			}
+		}
+		
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			// TODO Auto-generated method stub
-			return null;
+			PriorityQueue<Node> pq = new PriorityQueue<>(0, new AStarComparator());
+			for(Node node : nodes){
+				pq.add(node);
+			}
+			for(Node node : newNodes){
+				pq.add(node);
+			}
+			Queue<Node> result = new LinkedList<Node>();
+			Node[] orderedNodes = pq.toArray(new Node[pq.size()]);
+			for(int q = orderedNodes.length - 1; q >= 0; q--){
+				result.add(orderedNodes[q]);
+			}
+			return result;
 		}
 	}
 
