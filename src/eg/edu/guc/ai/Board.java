@@ -107,16 +107,28 @@ public class Board extends State {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder result = new StringBuilder();
-		result.append("Height: " + this.height + System.lineSeparator());
-		result.append("Width: " + this.width + System.lineSeparator());
+	public String visualize() {
+		char[][] map = new char[this.height*2][this.width*3];
 		for (int i=0; i<this.height; i++) {
 			for (int j=0; j<this.width; j++) {
-				result.append(this.board[i][j]);
-				if (i != 0) {
-					result.append(" ");
-				}
+				int mappedI = i * 2;
+				int mappedJ = j * 3;
+				char left = Tile.isLeftSideOpened(this.board[i][j]) ? ' ' : '|';
+				char right = Tile.isRightSideOpened(this.board[i][j]) ? ' ' : '|';
+				char up = Tile.isUpperSideOpened(this.board[i][j]) ? ' ' : '_';
+				char down = Tile.isBottomSideOpened(this.board[i][j]) ? ' ' : '_';
+				map[mappedI][mappedJ] = ' ';
+				map[mappedI][mappedJ+1] = up;
+				map[mappedI][mappedJ+2] = ' ';
+				map[mappedI+1][mappedJ] = left;
+				map[mappedI+1][mappedJ+1] = down;
+				map[mappedI+1][mappedJ+2] = right;
+			}
+		}
+		StringBuilder result = new StringBuilder();
+		for (int i=0; i<map.length; i++) {
+			for (int j=0; j<map[i].length; j++) {
+				result.append(map[i][j]);
 			}
 			result.append(System.lineSeparator());
 		}
