@@ -24,10 +24,12 @@ public class RollTheBall extends SearchProblem{
 			for (int j=0; j<state.width; j++) {
 				for (int k=0; k<4; k++) {
 					Queue<Node> resultingNodes = operator.execute(node, i, j, deltaX[k], deltaY[k]);
-					for (Node resultingNode : resultingNodes) {
-						if (!visitedStates.contains(resultingNode.state)) {
-							visitedStates.add(state);
-							children.add(resultingNode);
+					if (resultingNodes != null) {
+						for (Node resultingNode : resultingNodes) {
+							if (!visitedStates.contains(resultingNode.state)) {
+								visitedStates.add(state);
+								children.add(resultingNode);
+							}
 						}
 					}
 				}

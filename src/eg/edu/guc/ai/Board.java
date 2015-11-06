@@ -46,6 +46,14 @@ public class Board extends State {
 					!isUpperSideOpened(tile) &&
 					!isBottomSideOpened(tile);
 		}
+
+		public static boolean isBlock(int tile) {
+			return isMovable(tile) &&
+					!isLeftSideOpened(tile) &&
+					!isRightSideOpened(tile) &&
+					!isUpperSideOpened(tile) &&
+					!isBottomSideOpened(tile);
+		}
 	}
 	
 	public int board[][];
@@ -108,21 +116,30 @@ public class Board extends State {
 
 	@Override
 	public String visualize() {
-		char[][] map = new char[this.height*2][this.width*3];
+		char[][] map = new char[this.height*3][this.width*3];
 		for (int i=0; i<this.height; i++) {
 			for (int j=0; j<this.width; j++) {
-				int mappedI = i * 2;
+				int mappedI = i * 3;
 				int mappedJ = j * 3;
 				char left = Tile.isLeftSideOpened(this.board[i][j]) ? ' ' : '|';
 				char right = Tile.isRightSideOpened(this.board[i][j]) ? ' ' : '|';
 				char up = Tile.isUpperSideOpened(this.board[i][j]) ? ' ' : '_';
-				char down = Tile.isBottomSideOpened(this.board[i][j]) ? ' ' : '_';
+				char down = Tile.isBottomSideOpened(this.board[i][j]) ? ' ' : '-';
+				char special = ' ';
+				//S --> StartTile, E --> EndTile, B --> BlankTile, C --> BlockTile
+				if (Tile.isStart(this.board[i][j])) special = 'S';
+				else if (Tile.isEnd(this.board[i][j])) special = 'E';
+				else if (Tile.isBlank(this.board[i][j])) special = 'B';
+				else if (Tile.isBlock(this.board[i][j])) special = 'C';
 				map[mappedI][mappedJ] = ' ';
 				map[mappedI][mappedJ+1] = up;
 				map[mappedI][mappedJ+2] = ' ';
 				map[mappedI+1][mappedJ] = left;
-				map[mappedI+1][mappedJ+1] = down;
+				map[mappedI+1][mappedJ+1] = special;
 				map[mappedI+1][mappedJ+2] = right;
+				map[mappedI+2][mappedJ] = ' ';
+				map[mappedI+2][mappedJ+1] = down;
+				map[mappedI+2][mappedJ+2] = ' ';
 			}
 		}
 		StringBuilder result = new StringBuilder();
@@ -132,6 +149,10 @@ public class Board extends State {
 			}
 			result.append(System.lineSeparator());
 		}
+		for (int i=0; i<this.width*3; i++) {
+			result.append("=");
+		}
+		result.append(System.lineSeparator());
 		return result.toString();
 	}
 }

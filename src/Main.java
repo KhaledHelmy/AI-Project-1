@@ -6,6 +6,7 @@ import eg.edu.guc.ai.Board;
 import eg.edu.guc.ai.RollTheBall;
 import eg.edu.guc.ai.SearchAlgorithm;
 import eg.edu.guc.ai.SearchAlgorithm.BFS;
+import eg.edu.guc.ai.SearchAlgorithm.SearchOutput;
 
 
 public class Main {
@@ -54,17 +55,22 @@ public class Main {
 				            openings.add(k);
 				        }
 				        Collections.shuffle(openings);
-				        for (int k=0; k<2; i++) {
+				        for (int k=0; k<2; k++) {
 				        	board[i][j] |= (1 << openings.get(k));
 				        }
 					}
 				}
 			}
 		}
+		/*int[][] board = new int[3][3];
+		board[0][0] = (1 << 4) | (1 << 5);
+		board[1][1] = (1 << 0) | (1 << 2) | (1 << 4);
+		board[2][0] = (1 << 2) | (1 << 3);
+		board[2][1] = (1 << 1) | (1 << 6);*/
 		Board stateInstance = new Board(board);
 		RollTheBall problemInstance = new RollTheBall(stateInstance);
 		SearchAlgorithm searchInstance = new SearchAlgorithm();
 		BFS bfsInstance = new BFS();
-		searchInstance.search(problemInstance, bfsInstance, false);
+		SearchOutput output = searchInstance.search(problemInstance, bfsInstance, true);
 	}
 }

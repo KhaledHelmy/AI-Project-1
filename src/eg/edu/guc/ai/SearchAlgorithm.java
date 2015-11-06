@@ -48,6 +48,7 @@ public class SearchAlgorithm {
 			int[] deltaY = {1, -1, 0, 0};
 			int curX = startX, curY = startY;
 			while (curX != endX && curY != endY) {
+				vis[curX][curY] = true;
 				for (int k=0; k<4; k++) {
 					int newX = curX + deltaX[k];
 					int newY = curY + deltaY[k];
@@ -56,7 +57,6 @@ public class SearchAlgorithm {
 								(k == 1 && Tile.isRightSideOpened(state.board[newX][newY]) && Tile.isLeftSideOpened(state.board[curX][curY])) ||
 								(k == 2 && Tile.isUpperSideOpened(state.board[newX][newY]) && Tile.isBottomSideOpened(state.board[curX][curY])) ||
 								(k == 3 && Tile.isBottomSideOpened(state.board[newX][newY]) && Tile.isUpperSideOpened(state.board[curX][curY]))) {
-							vis[newX][newY] = true;
 							curX = newX;
 							curY = newY;
 							if (k == 0) goalSteps.add("Right");
