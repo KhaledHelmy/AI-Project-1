@@ -73,10 +73,10 @@ public class RollTheBall extends SearchProblem{
 			int newX = curX + deltaX[k];
 			int newY = curY + deltaY[k];
 			if (newX >= 0 && newX < state.height && newY >= 0 && newY < state.width) {
-				if ((k == 0 && Tile.isLeftSideOpened(state.board[newX][newY])) ||
-						(k == 1 && Tile.isRightSideOpened(state.board[newX][newY])) ||
-						(k == 2 && Tile.isUpperSideOpened(state.board[newX][newY])) ||
-						(k == 3 && Tile.isBottomSideOpened(state.board[newX][newY]))) {
+				if ((k == 0 && Tile.isLeftSideOpened(state.board[newX][newY]) && Tile.isRightSideOpened(state.board[curX][curY])) ||
+						(k == 1 && Tile.isRightSideOpened(state.board[newX][newY]) && Tile.isLeftSideOpened(state.board[curX][curY])) ||
+						(k == 2 && Tile.isUpperSideOpened(state.board[newX][newY]) && Tile.isBottomSideOpened(state.board[curX][curY])) ||
+						(k == 3 && Tile.isBottomSideOpened(state.board[newX][newY]) && Tile.isUpperSideOpened(state.board[curX][curY]))) {
 					result |= findPath(newX, newY, endX, endY, deltaX, deltaY, state, vis);
 				}
 			}
