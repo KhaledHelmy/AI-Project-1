@@ -38,6 +38,14 @@ public class Board {
 		public static boolean isEnd(int tile) {
 			return (tile & (1 << 6)) != 0;
 		}
+
+		public static boolean isBlank(int tile) {
+			return !isMovable(tile) &&
+					!isLeftSideOpened(tile) &&
+					!isRightSideOpened(tile) &&
+					!isUpperSideOpened(tile) &&
+					!isBottomSideOpened(tile);
+		}
 	}
 	
 	public int board[][];
@@ -51,26 +59,22 @@ public class Board {
 	}
 
 	public void moveTile(int... args) {
-		int oldLocationTile = this.board[args[0]][args[1]];
-		int newLocationTile = this.board[args[0]+args[2]][args[1]+args[3]];
-		if (Tile.isMovable(oldLocationTile) && isBlank(newLocationTile)) {
-			int blankTile = 0;
-			blankTile |= (oldLocationTile & (1 << 5));
-			blankTile |= (oldLocationTile & (1 << 6));
-			this.board[args[0]+args[2]][args[1]+args[3]] = this.board[args[0]][args[1]];
-			this.board[args[0]+args[2]][args[1]+args[3]] |= (newLocationTile & (1 << 5));
-			this.board[args[0]+args[2]][args[1]+args[3]] |= (newLocationTile & (1 << 6));
-			this.board[args[0]][args[1]] = blankTile;
-		} else {
-			throw new RuntimeException("Tile is not movable");
+		int x = args[0];
+		int y = args[1];
+		int newX = args[0] + args[2];
+		int newY = args[1] + args[3];
+		if (newX >= 0 && newX < height && newY >= 0 && newY < width) {
+			if (Tile.isMovable(this.board[x][y]) && Tile.isBlank(this.board[newX][newY])) {
+				int blankTile = 0;
+				blankTile |= (this.board[x][y] & (1 << 5));
+				blankTile |= (this.board[x][y] & (1 << 6));
+				this.board[newX][newY] = this.board[x][y];
+				this.board[newX][newY] |= (this.board[newX][newY] & (1 << 5));
+				this.board[newX][newY] |= (this.board[newX][newY] & (1 << 6));
+				this.board[x][y] = blankTile;
+				return;
+			}
 		}
-	}
-
-	private boolean isBlank(int tile) {
-		return !Tile.isMovable(tile) &&
-				!Tile.isLeftSideOpened(tile) &&
-				!Tile.isRightSideOpened(tile) &&
-				!Tile.isUpperSideOpened(tile) &&
-				!Tile.isBottomSideOpened(tile);
+		throw new RuntimeException("Cannot move tile!");
 	}
 }

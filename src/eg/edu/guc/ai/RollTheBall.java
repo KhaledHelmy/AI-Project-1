@@ -10,12 +10,30 @@ import eg.edu.guc.ai.Board.Tile;
 public class RollTheBall extends SearchProblem{
 	
 	public RollTheBall(Board initialState){
-		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveBlockOperation.getInstance())));
+		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveTileOperation.getInstance())));
+	}
+
+	@Override
+	public Queue<Node> expand(Node node) {
+		Queue<Node> children = new LinkedList<Node>();
+		Operation operator = this.operations.get(0);
+		int[] deltaX = {0, 0, 1, -1};
+		int[] deltaY = {1, -1, 0, 0};
+		for (int i=0; i<node.state.height; i++) {
+			for (int j=0; j<node.state.width; j++) {
+				for (int k=0; k<4; k++) {
+					Queue<Node> resultingNodes = operator.execute(node, i, j, deltaX[k], deltaY[k]);
+					if(resultingNodes != null) {
+						children.addAll(resultingNodes);
+					}
+				}
+			}
+		}
+		return children;
 	}
 
 	@Override
 	public boolean applyGoalTest(Node node){
-		// TODO Auto-generated method stub
 		int startX = 0, startY = 0;
 		int endX = node.state.height-1, endY = node.state.width-1;
 		for (int i=0; i<node.state.height; i++) {
@@ -62,10 +80,10 @@ public class RollTheBall extends SearchProblem{
 	}
 
 	// A class representing the move block operation
-	public static class MoveBlockOperation implements Operation{
-		private static MoveBlockOperation instance = new MoveBlockOperation();
+	public static class MoveTileOperation implements Operation{
+		private static MoveTileOperation instance = new MoveTileOperation();
 		
-		public static MoveBlockOperation getInstance(){
+		public static MoveTileOperation getInstance(){
 			return instance;
 		}
 		
@@ -75,11 +93,20 @@ public class RollTheBall extends SearchProblem{
 		// i.e. the block moves from [row, column] to [row + deltaX, column + deltaY].
 		@Override
 		public Queue<Node> execute(Node node, int... args) {
-			Queue<Node> resultingNodes = new LinkedList<Node>();
-			Node newNode = new Node(1, node, deepCopyState(node.state),
-					MoveBlockOperation.getInstance());
-			newNode.state.moveTile(args);
-			resultingNodes.add(newNode);
+			int x = args[0];
+			int y = args[1];
+			int newX = args[0] + args[2];
+			int newY = args[1] + args[3];
+			if (newX >= 0 && newX < node.state.height && newY >= 0 && newY < node.state.width) {
+				if (Tile.isMovable(node.state.board[x][y]) && Tile.isBlank(node.state.board[newX][newY])) {
+					Queue<Node> resultingNodes = new LinkedList<Node>();
+					Node newNode = new Node(1, node, deepCopyState(node.state),
+							MoveTileOperation.getInstance());
+					newNode.state.moveTile(args);
+					resultingNodes.add(newNode);
+					return resultingNodes;
+				}
+			}
 			return null;
 		}
 
