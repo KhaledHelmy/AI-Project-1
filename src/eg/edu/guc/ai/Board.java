@@ -77,4 +77,32 @@ public class Board {
 		}
 		throw new RuntimeException("Cannot move tile!");
 	}
+
+	@Override
+	public int hashCode() {
+		int result = 0;
+		for (int i=0; i<this.height; i++) {
+			for (int j=0; j<this.width; j++) {
+				result += this.board[i][j];
+				result %= 2000000000;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Board b = (Board) obj;
+		if (this.height == b.height && this.width == b.width) {
+			for (int i=0; i<this.height; i++) {
+				for (int j=0; j<this.width; j++) {
+					if (this.board[i][j] != b.board[i][j]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 }

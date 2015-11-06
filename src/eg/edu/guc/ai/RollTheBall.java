@@ -1,6 +1,7 @@
 package eg.edu.guc.ai;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,6 +9,7 @@ import eg.edu.guc.ai.Board.Tile;
 
 // A class representing the search problem of Roll the Ball.
 public class RollTheBall extends SearchProblem{
+	private HashSet<Board> visitedBoard = new HashSet<Board>();
 	
 	public RollTheBall(Board initialState){
 		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveTileOperation.getInstance())));
@@ -23,8 +25,11 @@ public class RollTheBall extends SearchProblem{
 			for (int j=0; j<node.state.width; j++) {
 				for (int k=0; k<4; k++) {
 					Queue<Node> resultingNodes = operator.execute(node, i, j, deltaX[k], deltaY[k]);
-					if(resultingNodes != null) {
-						children.addAll(resultingNodes);
+					for (Node resultingNode : resultingNodes) {
+						if (!visitedBoard.contains(resultingNode.state)) {
+							visitedBoard.add(node.state);
+							children.add(resultingNode);
+						}
 					}
 				}
 			}
