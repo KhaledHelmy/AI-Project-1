@@ -1,6 +1,6 @@
 package eg.edu.guc.ai;
 
-public class Board {
+public class State {
 	public static class Tile{
 		// bit 0 = is movable
 		// bit 1 = is left side opened
@@ -52,7 +52,7 @@ public class Board {
 	public int width;
 	public int height;
 	
-	public Board(int board[][]){
+	public State(int board[][]){
 		this.board = board;
 		height = board.length;
 		width = board[0].length;
@@ -92,7 +92,7 @@ public class Board {
 
 	@Override
 	public boolean equals(Object obj) {
-		Board b = (Board) obj;
+		State b = (State) obj;
 		if (this.height == b.height && this.width == b.width) {
 			for (int i=0; i<this.height; i++) {
 				for (int j=0; j<this.width; j++) {

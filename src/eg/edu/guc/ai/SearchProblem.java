@@ -10,10 +10,10 @@ public abstract class SearchProblem {
 	// goal test 		√
 	// path cost		?
 	public List<Operation> operations;
-	public Board initialState;
-	public HashSet<Board> visitedStates = new HashSet<Board>();
+	public State initialState;
+	public HashSet<State> visitedStates = new HashSet<State>();
 	
-	public SearchProblem(Board initialState, List<Operation> operations){
+	public SearchProblem(State initialState, List<Operation> operations){
 		this.initialState = initialState;
 		this.operations = operations;
 	}

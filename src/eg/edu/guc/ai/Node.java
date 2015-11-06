@@ -5,10 +5,10 @@ public class Node {
 	public int pathCost;
 	public Node parentNode;
 	public int depth;
-	public Board state;
+	public State state;
 	public Operation operations;
 	
-	public Node(int cost, Node parentNode, Board state, Operation operations){
+	public Node(int cost, Node parentNode, State state, Operation operations){
 		this.parentNode = parentNode;
 		if(this.parentNode != null){
 			this.pathCost = parentNode.pathCost + cost;
@@ -22,7 +22,7 @@ public class Node {
 		this.operations = operations;
 	}
 	
-	public static Node makeNode(Board initialState){
+	public static Node makeNode(State initialState){
 		return new Node(0, null, initialState, null);
 	}
 }

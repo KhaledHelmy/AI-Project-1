@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import eg.edu.guc.ai.Board.Tile;
+import eg.edu.guc.ai.State.Tile;
 
 // A class representing the search problem of Roll the Ball.
 public class RollTheBall extends SearchProblem{
 	
-	public RollTheBall(Board initialState){
+	public RollTheBall(State initialState){
 		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveTileOperation.getInstance())));
 	}
 
@@ -58,7 +58,7 @@ public class RollTheBall extends SearchProblem{
 	}
 
 	private boolean findPath(int curX, int curY, int endX, int endY,
-			int[] deltaX, int[] deltaY, Board state, boolean[][] vis) {
+			int[] deltaX, int[] deltaY, State state, boolean[][] vis) {
 		if (curX == endX && curY == endY) {
 			return true;
 		}
@@ -113,12 +113,12 @@ public class RollTheBall extends SearchProblem{
 			return null;
 		}
 
-		private Board deepCopyState(Board state) {
+		private State deepCopyState(State state) {
 			int [][] board = new int[state.board.length][];
 			for (int i = 0; i < state.board.length; i++) {
 		        board[i] = Arrays.copyOf(state.board[i], state.board[i].length);
 		    }
-			return new Board(board);
+			return new State(board);
 		}		
 	}
 }
