@@ -25,8 +25,11 @@ public class SearchAlgorithm {
 
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			// TODO Auto-generated method stub
-			return null;
+			LinkedList<Node> resultingNodes = new LinkedList<Node>(nodes);
+			for (Node newNode : newNodes) {
+				resultingNodes.addFirst(newNode);
+			}
+			return resultingNodes;
 		}
 	}
 	
@@ -34,8 +37,11 @@ public class SearchAlgorithm {
 
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			// TODO Auto-generated method stub
-			return null;
+			LinkedList<Node> resultingNodes = new LinkedList<Node>(nodes);
+			for (Node newNode : newNodes) {
+				resultingNodes.addLast(newNode);
+			}
+			return resultingNodes;
 		}
 	}
 
