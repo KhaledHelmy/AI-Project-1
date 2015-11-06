@@ -1,4 +1,5 @@
 package eg.edu.guc.ai;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 
@@ -10,6 +11,7 @@ public abstract class SearchProblem {
 	// path cost		?
 	public List<Operation> operations;
 	public Board initialState;
+	public HashSet<Board> visitedStates = new HashSet<Board>();
 	
 	public SearchProblem(Board initialState, List<Operation> operations){
 		this.initialState = initialState;

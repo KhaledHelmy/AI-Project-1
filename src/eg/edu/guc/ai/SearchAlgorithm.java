@@ -46,11 +46,19 @@ public class SearchAlgorithm {
 	}
 
 	public static class IDS implements Strategy{
+		private static int maxDepth = 0;
+		private static int foundDepth = 0;
 
 		@Override
 		public Queue<Node> execute(Queue<Node> nodes, Queue<Node> newNodes) {
-			// TODO Auto-generated method stub
-			return null;
+			LinkedList<Node> resultingNodes = new LinkedList<Node>(nodes);
+			for (Node newNode : newNodes) {
+				foundDepth = Math.max(foundDepth, newNode.depth);
+				if (newNode.depth <= maxDepth) {
+					resultingNodes.addFirst(newNode);
+				}
+			}
+			return resultingNodes;
 		}
 	}
 	
@@ -79,6 +87,7 @@ public class SearchAlgorithm {
 	}
 	
 	public SearchOutput search(SearchProblem problem, Strategy strategy){
+		problem.visitedStates.clear();
 		Queue<Node> queue = SearchAlgorithm.makeQueue(Node.makeNode(problem.initialState));
 		int numberOfExpandedNodes = 0;
 		
@@ -89,8 +98,16 @@ public class SearchAlgorithm {
 			if(problem.applyGoalTest(node) == true){
 				return new SearchOutput(false, node, numberOfExpandedNodes);
 			}
-			
+
 			queue = strategy.execute(queue, problem.expand(node));
+
+			if (strategy instanceof IDS) {
+				if (queue.isEmpty() && IDS.maxDepth < IDS.foundDepth) {
+					problem.visitedStates.clear();
+					queue.add(Node.makeNode(problem.initialState));
+					IDS.maxDepth ++;
+				}
+			}
 		}
 		
 		return new SearchOutput(true, null, numberOfExpandedNodes);
