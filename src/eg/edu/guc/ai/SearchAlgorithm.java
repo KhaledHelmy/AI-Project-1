@@ -7,7 +7,9 @@ import java.util.Queue;
 import eg.edu.guc.ai.Board.Tile;
 
 
-public abstract class SearchAlgorithm {
+public class SearchAlgorithm {
+	
+	public static SearchProblem staticProblem;
 	
 	public class SearchOutput{
 		public boolean failure;
@@ -113,14 +115,11 @@ public abstract class SearchAlgorithm {
 		}
 	}
 	
-	public static abstract int Heuristic1(Node node);
-	public static abstract int Heuristic2(Node node);
-	
 	public static class GreedyHeuristic1 implements Strategy{
 		static class GreedyComparator implements Comparator<Node> {
 			public int compare(Node n1, Node n2) {
-				int h1 = SearchAlgorithm.Heuristic1(n1);
-				int h2 = SearchAlgorithm.Heuristic1(n2);
+				int h1 = staticProblem.Heuristic1(n1);
+				int h2 = staticProblem.Heuristic1(n2);
 				return h2 - h1;
 			}
 		}
@@ -146,8 +145,8 @@ public abstract class SearchAlgorithm {
 	public static class GreedyHeuristic2 implements Strategy{
 		static class GreedyComparator implements Comparator<Node> {
 			public int compare(Node n1, Node n2) {
-				int h1 = SearchAlgorithm.Heuristic2(n1);
-				int h2 = SearchAlgorithm.Heuristic2(n2);
+				int h1 = staticProblem.Heuristic2(n1);
+				int h2 = staticProblem.Heuristic2(n2);
 				return h2 - h1;
 			}
 		}
@@ -173,8 +172,8 @@ public abstract class SearchAlgorithm {
 	public static class AStar implements Strategy{
 		static class AStarComparator implements Comparator<Node> {
 			public int compare(Node n1, Node n2) {
-				int h1 = SearchAlgorithm.Heuristic2(n1) + n1.pathCost;
-				int h2 = SearchAlgorithm.Heuristic2(n2) + n2.pathCost;
+				int h1 = staticProblem.Heuristic2(n1) + n1.pathCost;
+				int h2 = staticProblem.Heuristic2(n2) + n2.pathCost;
 				return h2 - h1;
 			}
 		}
@@ -204,6 +203,7 @@ public abstract class SearchAlgorithm {
 	}
 	
 	public SearchOutput search(SearchProblem problem, Strategy strategy, boolean visualize){
+		staticProblem = problem;
 		problem.visitedStates.clear();
 		Queue<Node> queue = SearchAlgorithm.makeQueue(Node.makeNode(problem.initialState));
 		int numberOfExpandedNodes = 0;

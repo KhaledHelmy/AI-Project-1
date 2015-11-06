@@ -13,6 +13,7 @@ public class RollTheBall extends SearchProblem{
 		super(initialState, new ArrayList<Operation>(Arrays.asList(MoveTileOperation.getInstance())));
 	}
 
+	@Override
 	public int Heuristic1(Node node){
 		Board board = (Board)node.state;
 		int[][] grid = board.board;
@@ -54,6 +55,7 @@ public class RollTheBall extends SearchProblem{
 		return result;
 	}
 	
+	@Override
 	public int Heuristic2(Node node){
 		return 0;
 	}

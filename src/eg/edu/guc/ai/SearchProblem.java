@@ -23,4 +23,7 @@ public abstract class SearchProblem {
 
 	// Test whether a node is a goal node or not.
 	public abstract boolean applyGoalTest(Node node);
+	
+	public abstract int Heuristic1(Node node);
+	public abstract int Heuristic2(Node node);
 }
